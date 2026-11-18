@@ -4,24 +4,28 @@
 
 The purpose of this project was to understand how audio middleware can be integrated into Unity to create sound events. I decided to use FMOD studio to develop a system where a click sound is played when a square has been pressed. 
 
-## How Was FMOD Integrated into Unity? (138 words)
+## How Was FMOD Integrated into Unity? (186 words)
 
-I chose to use FMOD as it integrates with Unity and allows me to create sound events seperate to the game code. This allows me to change how the audio behaves inside FMOD without having to rewrite the code which triggers it i.e adding parameters rather than using seperate audio files for each variation. 
+I chose to use FMOD as it integrates with Unity and allows me to create sound events separate to the game code. This allows me to change how the audio behaves inside FMOD without having to rewrite the code which triggers it i.e adding parameters rather than using seperate audio files for each variation. 
 
 To integrate FMOD into Unity, I installed FMOD studio alongisde its Unity integration package. I then created an FMOD studio project and linked it to Unity through the set up wizard. This then allowed the events that I created in FMOD to be accessed and triggered in Unity. 
 
 I replaced Unity's audio listener with FMOD's studio listener so FMOD could use the cameras position and orientation when calculating how 3D sounds should be heard if I were to implement these later down the line. 
 
+After creating my audio event, I assigned it to the Master Bank and built the sound banks in FMOD Studio. This generated the files Unity needed to access and play the sound. I then checked Unity's FMOD Events Browser to confirm that the CubeClick event had been recognised.
 
-## What Events Were Triggered and Logged? (152 words)
+## What Events Were Triggered and Logged? (189 words)
 
+I created a 2D audio event in FMOD studio called `CubeClick`, which used a short popping sound. To trigger the event, I attached a C# script to a cube inside of Unity. I used `OnMouseDown()` to detect when the player has interacted with the cube which then triggers the sound event in FMOD.
 
-I created a 2D audio event in FMOD studio called `CubeClick`, which used a short popping sound. To trigger the event, I attached a C# script to a cube inside of Unity. I called `OnMouseDown()` to detect when the player has interacted with the cube which then triggers the sound event in FMOD.
+To expand on this task, I decided to research into parameters inside of FMOD to make the popping sound increase in pitch each time it is clicked over the course of 3 clicks. After the third click, the parameter is returned back to its normal value. Using a parameter allowed me to control multiple pitch variations through one FMOD event rather than creating separate events for each sound. This also demonstrated how audio can respond dynamically to player interactions which could be useful in a larger game project.
 
-To expand on this task, I decided to research into parameters inside of FMOD to make the popping sound increase in pitch each time it is clicked over the course of 3 clicks. After the third click, the parameter is returned back to its normal value. 
+![](https://raw.githubusercontent.com/kdogz9/FMOD-sound-event/refs/heads/main/Screenshot%202026-11-18%20143515.png)
+**Figure 1** `Click level` parameter inside of FMOD.
 
-![]()
-I used `RuntimeManager.CreateInstance()` to create the audio event and `setParameterByName()` to change the pitch before playing the sound. I also implemented debug outputs so I could see when the event was triggered and the audio changing pitch each time. This helped me confirm that the system was responding correctly to player interactions.
+I used `RuntimeManager.CreateInstance()` to create the audio event and `setParameterByName()` to change the pitch before playing the sound.
+
+I also used `Debug.Log()` to record when the event was triggered and which pitch parameter value was selected. This helped me check that the parameter was cycling correctly.
 
 ```C# 
 private void OnMouseDown()
@@ -42,31 +46,13 @@ private void OnMouseDown()
 }
 ```
 
+## How Was the Middleware Validated in a Packaged Build? (84 words)
 
-**Suggested evidence:** Screenshot of your FMOD pitch automation curve and the `CubeSoundTrigger.cs` script.
+To validate the FMOD integration, I tested the audio event inside the Unity editor to ensure that clicking the cube triggered the popping sound to play. Once it was working, I created a windows build and tested it inside of there. I clicked the cube over a few times to make sure I heard all of the pitch changes and it going back to normal afterwards. This was necessary as it confirmed that FMOD and its sound banks were working correctly outside of Unity.
 
-## 4. How Was the Middleware Validated in a Packaged Build? (120 words)
+[YouTube link](https://youtu.be/EhKU6n_iHrY)
 
-**Explain:**
-- How you tested the sound inside the Unity Editor.
-- How you exported your project as a standalone Windows executable.
-- How you launched the `.exe` outside Unity.
-- How you verified that clicking the cube triggered the FMOD event.
-- How you checked that the pitch variations worked in the final build.
-- Why testing outside the Editor is important.
-
-**Sentence starter:**
-
-To validate the FMOD integration, I first tested the audio event within the Unity Editor to ensure that clicking the cube triggered the correct sound...
-
-**Questions to consider:**
-
-- Did the sound work in the standalone build?
-- Why is it important to test audio outside Unity?
-- What problems could occur if the sound banks weren't included correctly?
-- How did you confirm that the middleware was working as intended?
-
-**Suggested evidence:** Screenshot of the standalone Windows build and a short video demonstrating the sound changing when clicked.
+*Video demonstration of final result.*
 
 ## Declaration and sources 
 
